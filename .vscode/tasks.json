@@ -19,13 +19,13 @@
 				"docker-build"
 			],
 			"python": {
+				"file": "manage.py",
 				"args": [
 					"runserver",
 					"0.0.0.0:8000",
 					"--nothreading",
 					"--noreload"
-				],
-				"module": "BACK-END"
+				]
 			}
 		}
 	]
