@@ -1,4 +1,4 @@
-#!/Users/slarios/Back-End/.venv/bin/python3.12
+#!/Users/silviapinedajimenez/backend/.venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
