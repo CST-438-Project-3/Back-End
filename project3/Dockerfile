@@ -6,3 +6,4 @@ EXPOSE 8080
 
 
 ENTRYPOINT ["java", "-jar", "project3.jar"]
+CMD ["--server.port=8080"]

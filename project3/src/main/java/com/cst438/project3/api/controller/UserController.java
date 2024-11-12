@@ -1,4 +1,5 @@
 package com.cst438.project3.api.controller;
+import java.util.Optional;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,4 +13,9 @@ public class UserController {
     public String home(){
         return "This is the root! Woohoo!!";
     }
+    @GetMapping("/error")
+    public String error(){
+        return "error";
+    }
+
 }

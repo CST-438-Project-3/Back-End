@@ -1,11 +1,7 @@
 package com.cst438.project3.api.model;
 
 
-
 import jakarta.persistence.*;
-
-
-
 
 @Entity
 @Table(name="userTable")
