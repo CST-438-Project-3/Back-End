@@ -9,6 +9,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.springframework:spring-web:6.1.14" level="project" />
     <orderEntry type="library" name="Maven: org.apache.tomcat.embed:tomcat-embed-core:10.1.31" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:3.3.5" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:3.3.5" level="project" />
   </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="abc7b546-7862-4543-b4d1-c190c92b0c6d" />
