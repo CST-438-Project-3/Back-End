@@ -1,0 +1,5 @@
+build:
+  docker:
+    web: Dockerfile
+run:
+  web: java -jar build/libs/Wishlist-0.0.1-SNAPSHOT.jar --server.port=$PORT
