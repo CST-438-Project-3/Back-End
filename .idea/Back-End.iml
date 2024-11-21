@@ -68,6 +68,8 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:6.1.14" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-web:6.3.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.security:spring-security-config:6.3.4" level="project" />
   </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="abc7b546-7862-4543-b4d1-c190c92b0c6d" />
