@@ -1,0 +1,5 @@
+target/*
+!target/project3.jar
+.git/
+node_modules/
+*.log

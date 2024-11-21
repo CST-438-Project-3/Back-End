@@ -1,0 +1,19 @@
+#version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://uyu7j8yohcwo35j3.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/zj9a4pv8vf0i53p8
+      - SPRING_DATASOURCE_USERNAME=joveyn2s4jzc27yx
+      - SPRING_DATASOURCE_PASSWORD=kokvh4vifptr771n
+      - PORT=8080
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge

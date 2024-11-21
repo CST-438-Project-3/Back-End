@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 @Table(name="userTable")
 public class User {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
@@ -24,8 +23,6 @@ public class User {
 
     @Column(name="is_admin")
     private Boolean is_admin;
-
-
 
 
     public User() {};
@@ -68,5 +65,12 @@ public class User {
 
     public void setIs_admin(Boolean is_admin) {
         this.is_admin = is_admin;
+    }
+
+    public Object getPassword() {
+        return null;
+    }
+
+    public void setPassword(String password) {
     }
 }
