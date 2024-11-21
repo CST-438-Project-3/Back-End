@@ -23,6 +23,9 @@ public class User {
 
     @Column(name="is_admin")
     private Boolean is_admin;
+    @Column(name="password")
+    private String password;
+
 
 
     public User() {};
@@ -73,4 +76,5 @@ public class User {
 
     public void setPassword(String password) {
     }
+
 }
