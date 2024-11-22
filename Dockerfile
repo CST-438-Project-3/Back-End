@@ -1,24 +1,28 @@
 # Use an official JDK runtime as a parent image
-FROM eclipse-temurin:23-jdk
+FROM eclipse-temurin:17-jdk
+# Use Java 17 as it's widely supported and stable
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the Gradle wrapper and build configuration files first
+# Copy only Gradle wrapper and build files first for caching
 COPY build.gradle settings.gradle gradlew /app/
 COPY gradle /app/gradle/
 
-# Copy the rest of the source code
+# Run Gradle dependencies download step to leverage Docker layer caching
+RUN ./gradlew dependencies || true
+
+# Copy the source code
 COPY src /app/src
 
-# Run the Gradle build inside the container to create the JAR file
-RUN ./gradlew clean build
+# Build the application
+RUN ./gradlew clean bootJar
 
-# Copy the generated JAR file from build/libs to the working directory
-RUN mv /app/build/libs/pantrypal-0.0.1-SNAPSHOT.jar /app/app.jar
+# Copy the built JAR file to the app directory
+RUN cp /app/build/libs/*.jar /app/app.jar
 
-# Expose port 8080
+# Expose port 8080 for the application
 EXPOSE 8080
 
-# Run the JAR file
-ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=${PORT:-8080}"]
+# Run the application with the dynamic port (Heroku support)
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

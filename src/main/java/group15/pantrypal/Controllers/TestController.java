@@ -1,4 +1,4 @@
-package group15.pantrypal;
+package group15.pantrypal.Controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
