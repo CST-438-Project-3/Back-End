@@ -61,7 +61,7 @@ public class User {
         this.email = email;
     }
 
-    public Object getPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -69,5 +69,9 @@ public class User {
     }
 
     public void setIsAdmin(Boolean isAdmin) {
+    }
+
+    public Boolean getIsAdmin() {
+        return isAdmin;
     }
 }
