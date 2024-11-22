@@ -1,7 +1,7 @@
 package group15.pantrypal.Controllers;
 
 import group15.pantrypal.Service.UserService;
-import group15.pantrypal.model.user;
+import group15.pantrypal.model.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,7 @@ public class HomeController {
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password, HttpSession session) {
-        Optional<user> user = userService.findByUsername(username);
+        Optional<User> user = userService.findByUsername(username);
 
         if (user.isPresent() && user.get().getPassword().equals(password)) {
             session.setAttribute("username", username);

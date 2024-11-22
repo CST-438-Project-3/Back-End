@@ -4,11 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.util.Objects;
 
 @Entity
 @Table(name = "userTable")
-public class user {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +34,7 @@ public class user {
     private String password;
 
     // Default constructor
-    public user() {}
+    public User() {}
 
     // Getters and Setters
     public Integer getUserId() {
@@ -64,5 +63,11 @@ public class user {
 
     public Object getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+    }
+
+    public void setIsAdmin(Boolean isAdmin) {
     }
 }
