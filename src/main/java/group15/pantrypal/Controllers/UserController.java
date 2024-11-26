@@ -2,9 +2,10 @@ package group15.pantrypal.Controllers;
 
 import group15.pantrypal.Service.UserService;
 import group15.pantrypal.model.User;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import jakarta.servlet.http.HttpSession;
 
 import java.util.Optional;
 
@@ -20,19 +21,30 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestParam String username, @RequestParam String password) {
-        userService.createUser(username, password, false); // Assuming default `isAdmin` is false
-        return ResponseEntity.ok("Account created successfully!");
+        System.out.println("Register endpoint called with username: " + username);
+        try {
+            userService.createUser(username, password, false); // Default isAdmin to false
+            System.out.println("User created successfully: " + username);
+            return ResponseEntity.ok("Account created successfully!");
+        } catch (Exception e) {
+            System.out.println("Error during user registration: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during registration.");
+        }
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password, HttpSession session) {
+        System.out.println("Login endpoint called with username: " + username);
         Optional<User> user = userService.findByUsername(username);
 
         if (user.isPresent() && user.get().getPassword().equals(password)) {
+            System.out.println("Login successful for username: " + username);
             session.setAttribute("username", username);
             return ResponseEntity.ok("Login successful. Welcome, " + username + "!");
         }
 
+        System.out.println("Invalid credentials for username: " + username);
         return ResponseEntity.status(401).body("Invalid credentials.");
     }
 
@@ -68,4 +80,18 @@ public class UserController {
         session.invalidate();
         return ResponseEntity.ok("Account deleted successfully.");
     }
+    @RestControllerAdvice
+    public class GlobalExceptionHandler {
+
+        @ExceptionHandler(UserService.ValidationException.class)
+        public ResponseEntity<String> handleValidationException(UserService.ValidationException ex) {
+            return ResponseEntity.badRequest().body(ex.getMessage());
+        }
+
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<String> handleGeneralException(Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An unexpected error occurred");
+        }
+    }
+
 }

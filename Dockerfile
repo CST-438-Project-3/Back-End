@@ -1,28 +1,26 @@
-# Use an official JDK runtime as a parent image
-FROM eclipse-temurin:17-jdk
-# Use Java 17 as it's widely supported and stable
-
-# Set the working directory inside the container
+# Stage 1: Build the application
+FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 
-# Copy only Gradle wrapper and build files first for caching
-COPY build.gradle settings.gradle gradlew /app/
-COPY gradle /app/gradle/
+# Copy necessary files for the build
+COPY gradlew gradlew
+COPY gradle gradle
+COPY build.gradle build.gradle
+COPY settings.gradle settings.gradle
+COPY src src
 
-# Run Gradle dependencies download step to leverage Docker layer caching
-RUN ./gradlew dependencies || true
+# Run the build process
+RUN chmod +x gradlew && ./gradlew clean bootJar
 
-# Copy the source code
-COPY src /app/src
+# Stage 2: Create the final runtime image
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
 
-# Build the application
-RUN ./gradlew clean bootJar
+# Copy the built JAR file from the build stage
+COPY --from=build /app/build/libs/*.jar app.jar
 
-# Copy the built JAR file to the app directory
-RUN cp /app/build/libs/*.jar /app/app.jar
-
-# Expose port 8080 for the application
+# Expose the application port
 EXPOSE 8080
 
-# Run the application with the dynamic port (Heroku support)
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+# Use environment variable for server port (for Heroku support)
+CMD ["java", "-jar", "app.jar", "--server.port=${PORT}"]
