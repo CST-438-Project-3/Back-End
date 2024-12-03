@@ -7,6 +7,6 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mariadb://ao9moanwus0rjiex.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/s9p1dx09tp5ii0vd
-      SPRING_DATASOURCE_USERNAME: qusmryt3ex2fx77h
-      SPRING_DATASOURCE_PASSWORD: ivci1lhe85te1435
+      SPRING_DATASOURCE_URL:jdbc: mariadb://project3.chow0wcw2ldz.us-west-1.rds.amazonaws.com:3306/pantryDB
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: project3backend
