@@ -1,24 +1,26 @@
-# Use an official JDK runtime as a parent image
-FROM eclipse-temurin:23-jdk
-
-# Set the working directory inside the container
+# Stage 1: Build the application
+FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 
-# Copy the Gradle wrapper and build configuration files first
-COPY build.gradle settings.gradle gradlew /app/
-COPY gradle /app/gradle/
+# Copy necessary files for the build
+COPY gradlew gradlew
+COPY gradle gradle
+COPY build.gradle build.gradle
+COPY settings.gradle settings.gradle
+COPY src src
 
-# Copy the rest of the source code
-COPY src /app/src
+# Run the build process
+RUN chmod +x gradlew && ./gradlew clean bootJar
 
-# Run the Gradle build inside the container to create the JAR file
-RUN ./gradlew clean build
+# Stage 2: Create the final runtime image
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
 
-# Copy the generated JAR file from build/libs to the working directory
-RUN mv /app/build/libs/pantrypal-0.0.1-SNAPSHOT.jar /app/app.jar
+# Copy the built JAR file from the build stage
+COPY --from=build /app/build/libs/*.jar app.jar
 
-# Expose port 8080
+# Expose the application port
 EXPOSE 8080
 
-# Run the JAR file
-ENTRYPOINT ["java", "-jar", "app.jar", "--server.port=${PORT:-8080}"]
+# Use environment variable for server port (for Heroku support)
+CMD ["java", "-jar", "app.jar", "--server.port=${PORT}"]
