@@ -28,6 +28,13 @@ public class PantryController {
         return new ResponseEntity<>(pantries, HttpStatus.OK);
     }
 
+    // Get all pantries by user ID
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Pantry>> getPantriesByUserId(@PathVariable Long userId) {
+        List<Pantry> pantries = pantryRepository.findByUserId(userId);
+        return new ResponseEntity<>(pantries, HttpStatus.OK);
+    }
+
     // Get a pantry by ID
     @GetMapping("/{id}")
     public ResponseEntity<Pantry> getPantryById(@PathVariable Long id) {
