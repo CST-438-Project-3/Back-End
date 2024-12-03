@@ -1,12 +1,9 @@
-package group15.pantrypal;
+package group15.pantrypal.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "pantry_table")
 public class Pantry {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

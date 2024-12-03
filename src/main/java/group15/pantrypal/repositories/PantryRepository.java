@@ -1,5 +1,6 @@
-package group15.pantrypal;
+package group15.pantrypal.repositories;
 
+import group15.pantrypal.model.Pantry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

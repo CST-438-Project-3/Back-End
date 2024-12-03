@@ -1,5 +1,7 @@
-package group15.pantrypal;
+package group15.pantrypal.Controllers;
 
+import group15.pantrypal.model.Pantry;
+import group15.pantrypal.repositories.PantryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
