@@ -1,4 +1,4 @@
-package group15.pantrypal;
+package group15.pantrypal.useritems;
 
 import jakarta.persistence.*;
 
@@ -30,9 +30,7 @@ public class UserItems  {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public void setId(Long id) { this.id = id; }
 
     public Long getUserId() {
         return userId;

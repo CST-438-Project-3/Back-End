@@ -1,4 +1,4 @@
-package group15.pantrypal;
+package group15.pantrypal.useritems;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

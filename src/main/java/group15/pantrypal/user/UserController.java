@@ -1,4 +1,4 @@
-package group15.pantrypal;
+package group15.pantrypal.user;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

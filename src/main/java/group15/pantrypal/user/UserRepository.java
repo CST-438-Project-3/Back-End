@@ -1,6 +1,5 @@
-package group15.pantrypal;
+package group15.pantrypal.user;
 
-import group15.pantrypal.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
