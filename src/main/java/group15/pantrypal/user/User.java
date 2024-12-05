@@ -1,4 +1,4 @@
-package group15.pantrypal;
+package group15.pantrypal.user;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
