@@ -1,6 +1,5 @@
 package group15.pantrypal;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +10,11 @@ import java.util.List;
 @RequestMapping("/pantries")
 public class PantryController {
 
-    @Autowired
-    private PantryRepository pantryRepository;
+    private final PantryRepository pantryRepository;
+
+    public PantryController(PantryRepository pantryRepository) {
+        this.pantryRepository = pantryRepository;
+    }
 
     // Create a new pantry
     @PostMapping
@@ -25,6 +27,13 @@ public class PantryController {
     @GetMapping
     public ResponseEntity<List<Pantry>> getAllPantries() {
         List<Pantry> pantries = pantryRepository.findAll();
+        return new ResponseEntity<>(pantries, HttpStatus.OK);
+    }
+
+    // Get all pantries by user ID
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<Pantry>> getPantriesByUserId(@PathVariable Long userId) {
+        List<Pantry> pantries = pantryRepository.findByUserId(userId);
         return new ResponseEntity<>(pantries, HttpStatus.OK);
     }
 
