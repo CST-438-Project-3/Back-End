@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -19,21 +21,24 @@ public class AppConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000")
-                .allowedMethods("GET", "POST", "PUT", "DELETE","PATCH")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH")
                 .allowedHeaders("*")
                 .allowCredentials(true);
     }
 
-    // Security configuration
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/**").permitAll()
+                        .requestMatchers( "/login/**", "/api/oauth2/**", "/api/auth/**").permitAll()  // Public endpoints
+                        .anyRequest().authenticated()  // Protect other endpoints
                 )
-                .cors(withDefaults())
-                .csrf(AbstractHttpConfigurer::disable);  // Disable CSRF protection
+                .oauth2Login(oauth2 -> oauth2  // Configure OAuth2 Login
+                        .defaultSuccessUrl("/api/auth/oauth2-success", true) // Redirect after successful login
+                        .failureUrl("/api/auth/oauth2-failure") // Redirect after failure
+                )
+                .cors(withDefaults())  // Enable CORS
+                .csrf(AbstractHttpConfigurer::disable);  // Disable CSRF for simplicity (be cautious in production)
         return http.build();
     }
-
 }
