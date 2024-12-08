@@ -8,6 +8,7 @@ public class PantrypalApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PantrypalApplication.class, args);
+
 	}
 
 }
