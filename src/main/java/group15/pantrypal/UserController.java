@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -23,7 +24,10 @@ public class UserController {
 
     // Manual registration
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<String> register(@RequestBody Map<String, String> user) {
+        String username = user.get("username");
+        String password = user.get("password");
+
         try {
             System.out.println("Registering user: " + username);
             userService.createUser(username, password, "USER"); // Default role is USER
@@ -33,10 +37,11 @@ public class UserController {
             System.err.println("Validation error during registration: " + e.getMessage());
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // Log full stack trace
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during registration.");
         }
     }
+
 
     // Manual login
     @PostMapping("/login")
