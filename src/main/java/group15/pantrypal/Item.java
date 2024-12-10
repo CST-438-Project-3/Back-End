@@ -20,6 +20,9 @@ public class Item {
     @Column(name = "item_category")
     private String itemCategory;
 
+    @Column(name = "item_url")
+    private String itemUrl;
+
     // Getters and setters
     public Long getId() {
         return id;
@@ -44,5 +47,9 @@ public class Item {
     public void setItemCategory(String itemCategory) {
         this.itemCategory = itemCategory;
     }
+
+    public String getItemUrl() { return itemUrl; }
+
+    public void setItemUrl(String itemUrl) { this.itemUrl = itemUrl; }
 
 }
