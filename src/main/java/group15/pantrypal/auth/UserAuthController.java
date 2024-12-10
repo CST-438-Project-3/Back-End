@@ -1,7 +1,5 @@
-package group15.pantrypal;
+package group15.pantrypal.auth;
 
-import group15.pantrypal.UserService;
-import group15.pantrypal.Model.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +12,11 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
-public class UserController {
+public class UserAuthController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserAuthController(UserService userService) {
         this.userService = userService;
     }
 
@@ -46,7 +44,7 @@ public class UserController {
     // Manual login
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password, HttpSession session) {
-        Optional<User> user = userService.findByUsername(username);
+        Optional<UserAuth> user = userService.findByUsername(username);
         if (user.isPresent() && userService.passwordMatch(password, user.get().getPassword())) {
             session.setAttribute("username", username);
             session.setAttribute("role", user.get().getRole());
@@ -75,9 +73,9 @@ public class UserController {
             String email = oauthUser.getAttribute("email");
             String name = oauthUser.getAttribute("name");
 
-            User user = userService.createOrUpdateOAuth2User(email, name);
-            session.setAttribute("username", user.getUsername());
-            session.setAttribute("role", user.getRole());
+            UserAuth userAuth = userService.createOrUpdateOAuth2User(email, name);
+            session.setAttribute("username", userAuth.getUsername());
+            session.setAttribute("role", userAuth.getRole());
             return ResponseEntity.ok("OAuth2 login successful. Welcome, " + name + "!");
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated via OAuth2.");
@@ -96,10 +94,10 @@ public class UserController {
         if (currentUsername == null) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not logged in.");
         }
-        userService.findByUsername(currentUsername).ifPresent(user -> {
-            user.setUsername(username);
-            user.setEmail(email);
-            userService.saveUser(user);
+        userService.findByUsername(currentUsername).ifPresent(userAuth -> {
+            userAuth.setUsername(username);
+            userAuth.setEmail(email);
+            userService.saveUser(userAuth);
         });
         return ResponseEntity.ok("Profile updated successfully.");
     }
@@ -112,7 +110,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not logged in.");
         }
 
-        Optional<User> user = userService.findByUsername(currentUsername);
+        Optional<UserAuth> user = userService.findByUsername(currentUsername);
         user.ifPresent(userService::deleteUser);
         session.invalidate();
         return ResponseEntity.ok("Account deleted successfully.");

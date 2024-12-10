@@ -1,10 +1,10 @@
-package group15.pantrypal.Model;
+package group15.pantrypal.auth;
 
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class UserAuth {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class User {
     private String password;
 
     // Default constructor
-    public User() {}
+    public UserAuth() {}
 
     // Getters and Setters
     public Integer getUserId() {
