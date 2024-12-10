@@ -1,7 +1,5 @@
-package group15.pantrypal;
+package group15.pantrypal.auth;
 
-import group15.pantrypal.Model.User;
-import group15.pantrypal.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -12,11 +10,11 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserAuthRepository userAuthRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserAuthRepository userAuthRepository) {
+        this.userAuthRepository = userAuthRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
@@ -30,13 +28,13 @@ public class UserService {
             throw new ValidationException("User already exists.");
         }
 
-        User user = new User();
-        user.setUsername(username);
-        user.setPassword(passwordEncoder.encode(password)); // Encrypt password
-        user.setRole(role); // Set role
-        user.setEmail(username + "@example.com");
+        UserAuth userAuth = new UserAuth();
+        userAuth.setUsername(username);
+        userAuth.setPassword(passwordEncoder.encode(password)); // Encrypt password
+        userAuth.setRole(role); // Set role
+        userAuth.setEmail(username + "@example.com");
 
-        userRepository.save(user);
+        userAuthRepository.save(userAuth);
         System.out.println("User saved: " + username);
     }
 
@@ -46,32 +44,32 @@ public class UserService {
     }
 
     // Create or update a user for OAuth2 login
-    public User createOrUpdateOAuth2User(String email, String name) {
+    public UserAuth createOrUpdateOAuth2User(String email, String name) {
         // Check if user already exists
-        Optional<User> existingUser = findByUsername(email);
+        Optional<UserAuth> existingUser = findByUsername(email);
 
         if (existingUser.isPresent()) {
-            User user = existingUser.get();
-            user.setUsername(name); // Update the name if needed
-            return saveUser(user);
+            UserAuth userAuth = existingUser.get();
+            userAuth.setUsername(name); // Update the name if needed
+            return saveUser(userAuth);
         } else {
             // Create a new user
-            User user = new User();
-            user.setUsername(name);
-            user.setEmail(email);
-            user.setRole("USER"); // Default to "USER" role for OAuth2 users
-            user.setPassword("oauth2-user"); // Placeholder password (not used for OAuth2)
+            UserAuth userAuth = new UserAuth();
+            userAuth.setUsername(name);
+            userAuth.setEmail(email);
+            userAuth.setRole("USER"); // Default to "USER" role for OAuth2 users
+            userAuth.setPassword("oauth2-user"); // Placeholder password (not used for OAuth2)
 
-            return saveUser(user);
+            return saveUser(userAuth);
         }
     }
 
     // Save user to the database
-    public User saveUser(User user) {
-        if (user == null) {
+    public UserAuth saveUser(UserAuth userAuth) {
+        if (userAuth == null) {
             throw new IllegalArgumentException("User must not be null");
         }
-        return userRepository.save(user);
+        return userAuthRepository.save(userAuth);
     }
 
     // Validate user input
@@ -82,16 +80,16 @@ public class UserService {
     }
 
     // Find a user by username
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<UserAuth> findByUsername(String username) {
+        return userAuthRepository.findByUsername(username);
     }
 
     // Delete a user by object
-    public void deleteUser(User user) {
-        if (user == null) {
+    public void deleteUser(UserAuth userAuth) {
+        if (userAuth == null) {
             throw new IllegalArgumentException("User must not be null");
         }
-        userRepository.delete(user);
+        userAuthRepository.delete(userAuth);
     }
 
     // Delete a user by ID
@@ -99,7 +97,7 @@ public class UserService {
         if (userId == null) {
             throw new IllegalArgumentException("User ID must not be null");
         }
-        userRepository.deleteById(userId);
+        userAuthRepository.deleteById(userId);
     }
 
     public boolean passwordMatch(String rawPassword, String encodedPassword) {

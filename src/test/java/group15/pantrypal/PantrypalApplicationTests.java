@@ -1,5 +1,7 @@
 package group15.pantrypal;
 
+import group15.pantrypal.auth.UserAuthRepository;
+import group15.pantrypal.auth.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -18,7 +20,7 @@ class PantrypalApplicationTests {
 		String rawPassword = "mypassword";
 		String encodedPassword = new BCryptPasswordEncoder().encode(rawPassword);
 
-		UserService userService = new UserService(mock(UserRepository.class));
+		UserService userService = new UserService(mock(UserAuthRepository.class));
 		boolean matches = userService.passwordMatch(rawPassword, encodedPassword);
 
 		assertTrue(matches); // This should pass if the password encoding and matching work correctly
