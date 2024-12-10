@@ -30,8 +30,8 @@ public class AppConfig implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers( "/login/**", "/api/oauth2/**", "/api/auth/**").permitAll()  // Public endpoints
-                        .anyRequest().authenticated()  // Protect other endpoints
+                        .requestMatchers( "/**").permitAll()  // Public endpoints
+//                        .anyRequest().authenticated()  // Protect other endpoints
                 )
                 .oauth2Login(oauth2 -> oauth2  // Configure OAuth2 Login
                         .defaultSuccessUrl("/api/auth/oauth2-success", true) // Redirect after successful login
