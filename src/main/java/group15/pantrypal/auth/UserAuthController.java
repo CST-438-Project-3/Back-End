@@ -1,5 +1,7 @@
 package group15.pantrypal.auth;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
@@ -46,6 +49,7 @@ public class UserAuthController {
     public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password, HttpSession session) {
         Optional<UserAuth> user = userService.findByUsername(username);
         if (user.isPresent() && userService.passwordMatch(password, user.get().getPassword())) {
+            session.setAttribute("userId", user.get().getUserId());
             session.setAttribute("username", username);
             session.setAttribute("role", user.get().getRole());
             return ResponseEntity.ok("Login successful. Welcome, " + username + "!");
@@ -62,23 +66,37 @@ public class UserAuthController {
 
     // OAuth2 success handler
     @GetMapping("/oauth2-success")
-    public ResponseEntity<String> oauth2Success(HttpSession session) {
+    public ResponseEntity<String> oauth2Success(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println("OAuth2 Principal: " + principal);
 
-        if (principal instanceof OAuth2User) {
-            OAuth2User oauthUser = (OAuth2User) principal;
+        if (principal instanceof OAuth2User oauthUser) {
             System.out.println("OAuth2 Attributes: " + oauthUser.getAttributes());
 
             String email = oauthUser.getAttribute("email");
             String name = oauthUser.getAttribute("name");
 
             UserAuth userAuth = userService.createOrUpdateOAuth2User(email, name);
+            HttpSession session = request.getSession();
             session.setAttribute("username", userAuth.getUsername());
             session.setAttribute("role", userAuth.getRole());
+            session.setAttribute("userId", userAuth.getUserId());
+
+            response.sendRedirect("http://localhost:8081/(tabs)");
             return ResponseEntity.ok("OAuth2 login successful. Welcome, " + name + "!");
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated via OAuth2.");
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getAuthenticatedUser(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in.");
+        }
+        Optional<UserAuth> user = userService.findById(userId);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // OAuth2 failure handler

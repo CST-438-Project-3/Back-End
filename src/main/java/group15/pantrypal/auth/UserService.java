@@ -108,6 +108,10 @@ public class UserService {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
+    public Optional<UserAuth> findById(Long userId) {
+        return userAuthRepository.findById(userId);
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public static class ValidationException extends RuntimeException {
         public ValidationException(String message) {

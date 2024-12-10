@@ -34,7 +34,7 @@ public class AppConfig implements WebMvcConfigurer {
 //                        .anyRequest().authenticated()  // Protect other endpoints
                 )
                 .oauth2Login(oauth2 -> oauth2  // Configure OAuth2 Login
-                        .defaultSuccessUrl("http://localhost:8081/(tabs)", true) // Redirect after successful login
+                        .defaultSuccessUrl("/api/auth/oauth2-success", true) // Redirect after successful login
                         .failureUrl("/api/auth/oauth2-failure") // Redirect after failure
                 )
                 .cors(withDefaults())  // Enable CORS
