@@ -15,7 +15,7 @@ COPY src /app/src
 RUN ./gradlew clean build
 
 # Copy the generated JAR file from build/libs to the working directory
-RUN mv /app/build/libs/pantrypal-0.0.1-SNAPSHOT.jar /app/app.jar
+RUN mv /app/build/libs/Back-End-0.0.1-SNAPSHOT.jar /app/app.jar
 
 # Expose port 8080
 EXPOSE 8080
