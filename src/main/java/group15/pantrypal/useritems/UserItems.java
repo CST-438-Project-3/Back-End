@@ -25,6 +25,9 @@ public class UserItems  {
     @Column(name = "expiration_date")
     private String expirationDate;
 
+    @Column(name = "is_favorite")
+    private boolean isFavorite;
+
     // Getters and setters
     public Long getId() {
         return id;
@@ -69,5 +72,9 @@ public class UserItems  {
     public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
     }
+
+    public boolean getIsFavorite() { return isFavorite; }
+
+    public void setIsFavorite(boolean isFavorite) { this.isFavorite = isFavorite; }
 
 }
