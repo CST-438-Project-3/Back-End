@@ -14,13 +14,13 @@ public class UserAuth {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "role", nullable = false)
     private String role; // Use "USER", "ADMIN", etc.
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     // Default constructor
