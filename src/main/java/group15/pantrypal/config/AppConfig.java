@@ -20,7 +20,7 @@ public class AppConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000", "http://localhost:19006", "http://localhost:8081") // Add 8081
+                .allowedOrigins("https://pantrypal-dlxfpxjfr-xeahhs-projects.vercel.app", "http://localhost:19006", "http://localhost:8081") // Add 8081
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS") // Include OPTIONS for preflight
                 .allowedHeaders("*")
                 .allowCredentials(true);
