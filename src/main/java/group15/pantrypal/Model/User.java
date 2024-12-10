@@ -1,7 +1,6 @@
 package group15.pantrypal.Model;
 
 import jakarta.persistence.*;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @Entity
 @Table(name = "user")
@@ -13,18 +12,15 @@ public class User {
     private Integer userId;
 
     @Column(name = "username", nullable = false, unique = true)
-    @NotNull
     private String username;
 
     @Column(name = "email", nullable = false, unique = true)
-    @NotNull
     private String email;
 
     @Column(name = "role", nullable = false)
     private String role; // Use "USER", "ADMIN", etc.
 
     @Column(name = "password", nullable = false)
-    @NotNull
     private String password;
 
     // Default constructor
