@@ -42,12 +42,61 @@ public class ItemController {
     public ResponseEntity<Item> updateItem(@PathVariable Long id, @RequestBody Item itemDetails) {
         return itemRepository.findById(id)
                 .map(item -> {
-                    item.setItemName(itemDetails.getItemName());
-                    item.setItemCategory(itemDetails.getItemCategory());
+                    // Update fields when req
+                    if (itemDetails.getItemName() != null) {
+                        item.setItemName(itemDetails.getItemName());
+                    }
+                    if (itemDetails.getItemCategory() != null) {
+                        item.setItemCategory(itemDetails.getItemCategory());
+                    }
+                    if (itemDetails.getItemQuantity() != null) {
+                        item.setItemQuantity(itemDetails.getItemQuantity());
+                    }
+                    if (itemDetails.getItemUrl() != null) {
+                        item.setItemUrl(itemDetails.getItemUrl());
+                    }
+                    if (itemDetails.getIsFavorite() != null) {
+                        item.setIsFavorite(itemDetails.getIsFavorite());
+                    }
+
                     Item updatedItem = itemRepository.save(item);
                     return new ResponseEntity<>(updatedItem, HttpStatus.OK);
                 })
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Update an Item with toggling
+    @PatchMapping("/{id}")
+    public ResponseEntity<Item> updateItemPartial(@PathVariable Long id, @RequestBody Item itemDetails) {
+        try {
+            // Log req to check if the data is correct
+            System.out.println("Received request to toggle favorite for item ID: " + id);
+
+            // Fetch item by ID
+            return itemRepository.findById(id)
+                    .map(item -> {
+                        // Log the current item data
+                        System.out.println("Current item before update: " + item);
+
+                        // Toggle favorite
+                        if (itemDetails.getIsFavorite() != null) {
+                            item.setIsFavorite(itemDetails.getIsFavorite());  // Set the value
+                        }
+
+                        // Save updates
+                        Item updatedItem = itemRepository.save(item);
+
+                        // Log updates
+                        System.out.println("Updated item: " + updatedItem);
+                        return new ResponseEntity<>(updatedItem, HttpStatus.OK);
+                    })
+                    .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        } catch (Exception e) {
+            // Log the error
+            System.err.println("Error toggling favorite: " + e.getMessage());
+            e.printStackTrace();  // Print the full stack trace to the console
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500 error response
+        }
     }
 
     // Delete an item
@@ -60,5 +109,4 @@ public class ItemController {
                 })
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-
 }
