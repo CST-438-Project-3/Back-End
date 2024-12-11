@@ -19,7 +19,7 @@ public class UserService {
     }
 
     // Create a user for manual registration
-    public void createUser(String username, String password, String role) {
+    public void createUser(String name, String username, String password, String role) {
         System.out.println("Creating user: " + username);
         validateUserInput(username, password);
 
@@ -29,18 +29,19 @@ public class UserService {
         }
 
         UserAuth userAuth = new UserAuth();
+        userAuth.setName(name);
         userAuth.setUsername(username);
         userAuth.setPassword(passwordEncoder.encode(password)); // Encrypt password
         userAuth.setRole(role); // Set role
-        userAuth.setEmail(username + "@example.com");
+        userAuth.setEmail(null); // Email not needed for manual registration
 
         userAuthRepository.save(userAuth);
         System.out.println("User saved: " + username);
     }
 
     // Overloaded createUser method for default role = "USER"
-    public void createUser(String username, String password) {
-        createUser(username, password, "USER");
+    public void createUser(String name, String username, String password) {
+        createUser(name, username, password, "USER");
     }
 
     // Create or update a user for OAuth2 login
@@ -48,20 +49,20 @@ public class UserService {
         // Check if user already exists
         Optional<UserAuth> existingUser = findByEmail(email);
 
+        UserAuth userAuth;
         if (existingUser.isEmpty()) {
             // Create a new user
-            UserAuth userAuth = new UserAuth();
-            userAuth.setUsername(name);
+            userAuth = new UserAuth();
+            userAuth.setName(name);
+            userAuth.setUsername(email);
             userAuth.setEmail(email);
             userAuth.setRole("USER"); // Default to "USER" role for OAuth2 users
             userAuth.setPassword(null); // password not needed for OAuth2 users
-
-            return saveUser(userAuth);
         } else {
-            UserAuth userAuth = existingUser.get();
-            userAuth.setUsername(existingUser.get().getUsername()); // Update the name if needed
-            return saveUser(userAuth);
+            userAuth = existingUser.get();
+            userAuth.setName(existingUser.get().getName()); // Update the name if needed
         }
+        return saveUser(userAuth);
     }
 
     private Optional<UserAuth> findByEmail(String email) {

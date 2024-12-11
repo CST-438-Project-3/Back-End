@@ -81,23 +81,35 @@ public class UserAuthController {
             session.setAttribute("username", userAuth.getUsername());
             session.setAttribute("role", userAuth.getRole());
             session.setAttribute("userId", userAuth.getUserId());
-
+            System.out.println("userId: "+userAuth.getUserId());
             response.sendRedirect("http://localhost:8081/(tabs)");
-            return ResponseEntity.ok("OAuth2 login successful. Welcome, " + name + "!");
+            return ResponseEntity.ok("OAuth2 login successful. Welcome " + name + "!");
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated via OAuth2.");
     }
 
     @GetMapping("/me")
     public ResponseEntity<?> getAuthenticatedUser(HttpServletRequest request) {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            System.out.println("Session not found.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in.");
+        }
+
+        System.out.println("Session ID: " + session.getId());
+        session.getAttributeNames().asIterator().forEachRemaining(
+                attr -> System.out.println(attr + ": " + session.getAttribute(attr))
+        );
+
         Long userId = (Long) session.getAttribute("userId");
         if (userId == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You are not logged in.");
         }
+
         Optional<UserAuth> user = userService.findById(userId);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
     // OAuth2 failure handler
     @GetMapping("/oauth2-failure")

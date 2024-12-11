@@ -14,6 +14,9 @@ public class UserAuth {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "email", unique = true)
     private String email;
 
@@ -33,6 +36,14 @@ public class UserAuth {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUsername() {
