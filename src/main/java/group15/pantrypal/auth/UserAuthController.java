@@ -86,7 +86,7 @@ public class UserAuthController {
             session.setAttribute("userId", userAuth.getUserId());
             System.out.println("userId: "+userAuth.getUserId());
             response.sendRedirect("http://localhost:8081/(tabs)");
-            return ResponseEntity.ok("OAuth2 login successful. Welcome " + name + "!");
+            return ResponseEntity.ok(String.valueOf(userAuth.getUserId()));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not authenticated via OAuth2.");
     }
