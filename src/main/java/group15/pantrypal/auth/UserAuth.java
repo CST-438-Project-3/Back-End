@@ -9,10 +9,13 @@ public class UserAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "username", nullable = false, unique = true)
     private String username;
+
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "email", unique = true)
     private String email;
@@ -27,12 +30,20 @@ public class UserAuth {
     public UserAuth() {}
 
     // Getters and Setters
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getUsername() {
