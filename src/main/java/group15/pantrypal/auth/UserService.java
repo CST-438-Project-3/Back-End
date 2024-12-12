@@ -46,22 +46,26 @@ public class UserService {
     // Create or update a user for OAuth2 login
     public UserAuth createOrUpdateOAuth2User(String email, String name) {
         // Check if user already exists
-        Optional<UserAuth> existingUser = findByUsername(email);
+        Optional<UserAuth> existingUser = findByEmail(email);
 
-        if (existingUser.isPresent()) {
-            UserAuth userAuth = existingUser.get();
-            userAuth.setUsername(name); // Update the name if needed
-            return saveUser(userAuth);
-        } else {
+        if (existingUser.isEmpty()) {
             // Create a new user
             UserAuth userAuth = new UserAuth();
             userAuth.setUsername(name);
             userAuth.setEmail(email);
             userAuth.setRole("USER"); // Default to "USER" role for OAuth2 users
-            userAuth.setPassword("oauth2-user"); // Placeholder password (not used for OAuth2)
+            userAuth.setPassword(null); // password not needed for OAuth2 users
 
             return saveUser(userAuth);
+        } else {
+            UserAuth userAuth = existingUser.get();
+            userAuth.setUsername(existingUser.get().getUsername()); // Update the name if needed
+            return saveUser(userAuth);
         }
+    }
+
+    private Optional<UserAuth> findByEmail(String email) {
+        return userAuthRepository.findByEmail(email);
     }
 
     // Save user to the database
