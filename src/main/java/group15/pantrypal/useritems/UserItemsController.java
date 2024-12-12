@@ -52,6 +52,7 @@ public class UserItemsController {
                     userItem.setItemId(userItemDetails.getItemId());
                     userItem.setUserId(userItemDetails.getUserId());
                     userItem.setQuantity(userItemDetails.getQuantity());
+                    userItem.setIsFavorite(userItemDetails.getIsFavorite());
                     UserItems updatedUserItem = userItemsRepository.save(userItem);
                     return new ResponseEntity<>(updatedUserItem, HttpStatus.OK);
                 })
@@ -75,9 +76,9 @@ public class UserItemsController {
                     if (userItemDetails.getUnit() != null) {
                         userItem.setUnit(userItemDetails.getUnit());
                     }
-//                    if (userItemDetails.getIsFavorite() != userItem.getIsFavorite()) {
-//                        userItem.setIsFavorite(userItemDetails.getIsFavorite());
-//                    }
+                    if (userItemDetails.getIsFavorite() != userItem.getIsFavorite()) {
+                        userItem.setIsFavorite(userItemDetails.getIsFavorite());
+                    }
                     UserItems updatedUserItem = userItemsRepository.save(userItem);
                     return new ResponseEntity<>(updatedUserItem, HttpStatus.OK);
                 })

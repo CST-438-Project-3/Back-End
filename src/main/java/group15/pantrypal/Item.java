@@ -19,16 +19,8 @@ public class Item {
     @Column(name = "item_category")
     private String itemCategory;
 
-
-    @Column(name = "item_quantity")
-    private Integer itemQuantity;
-
     @Column(name = "item_url")
     private String itemUrl;
-
-    @Column(name = "is_favorite")
-    private Boolean isFavorite;
-
 
     // Getters and setters
     public Long getId() {
@@ -55,29 +47,12 @@ public class Item {
         this.itemCategory = itemCategory;
     }
 
-
-    public Integer getItemQuantity() {
-        return itemQuantity;
-    }
-
-    public void setItemQuantity(int itemQuantity) {
-        this.itemQuantity = itemQuantity;
-    }
-
     public String getItemUrl() {
         return itemUrl;
     }
 
     public void setItemUrl(String itemUrl) {
         this.itemUrl = itemUrl;
-    }
-
-    public Boolean getIsFavorite() {
-        return isFavorite;
-    }
-
-    public void setIsFavorite(Boolean isFavorite) {
-        this.isFavorite = isFavorite;
     }
 
 }

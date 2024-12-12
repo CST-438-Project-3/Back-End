@@ -44,9 +44,7 @@ public class ItemController {
                 .map(item -> {
                     item.setItemName(itemDetails.getItemName());
                     item.setItemCategory(itemDetails.getItemCategory());
-                    item.setItemQuantity(itemDetails.getItemQuantity());
                     item.setItemUrl(itemDetails.getItemUrl());
-                    item.setIsFavorite(itemDetails.getIsFavorite());
                     Item updatedItem = itemRepository.save(item);
                     return new ResponseEntity<>(updatedItem, HttpStatus.OK);
                 })
@@ -65,15 +63,8 @@ public class ItemController {
                         item.setItemCategory(itemDetails.getItemCategory());
                     }
 
-                    if (itemDetails.getItemQuantity() != null) {
-                        item.setItemQuantity(itemDetails.getItemQuantity());
-                    }
                     if (itemDetails.getItemUrl() != null) {
                         item.setItemUrl(itemDetails.getItemUrl());
-                    }
-                   
-                    if ( itemDetails.getIsFavorite() != (item.getIsFavorite()) ) {
-                        item.setIsFavorite(itemDetails.getIsFavorite());
                     }
                   
                     Item updatedItem = itemRepository.save(item);
