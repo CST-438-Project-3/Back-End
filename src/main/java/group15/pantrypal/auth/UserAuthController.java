@@ -47,13 +47,15 @@ public class UserAuthController {
 
     // Manual login
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password, HttpSession session) {
-        Optional<UserAuth> user = userService.findByUsername(username);
-        if (user.isPresent() && userService.passwordMatch(password, user.get().getPassword())) {
-            session.setAttribute("userId", user.get().getUserId());
+    public ResponseEntity<String> login(@RequestBody Map<String, String> user, HttpSession session) {
+        String username = user.get("username");
+        String password = user.get("password");
+        Optional<UserAuth> userAuth = userService.findByUsername(username);
+        if (userAuth.isPresent() && userService.passwordMatch(password, userAuth.get().getPassword())) {
+            session.setAttribute("userId", userAuth.get().getUserId());
             session.setAttribute("username", username);
-            session.setAttribute("role", user.get().getRole());
-            return ResponseEntity.ok("Login successful. Welcome, " + username + "!");
+            session.setAttribute("role", userAuth.get().getRole());
+            return ResponseEntity.ok(String.valueOf(userAuth.get().getUserId()));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials.");
     }
