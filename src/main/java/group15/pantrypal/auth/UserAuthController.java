@@ -26,12 +26,13 @@ public class UserAuthController {
     // Manual registration
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody Map<String, String> user) {
+        String name = user.get("name");
         String username = user.get("username");
         String password = user.get("password");
 
         try {
             System.out.println("Registering user: " + username);
-            userService.createUser(username, password, "USER"); // Default role is USER
+            userService.createUser(name, username, password, "USER"); // Default role is USER
             System.out.println("User registered successfully: " + username);
             return ResponseEntity.ok("Account created successfully!");
         } catch (UserService.ValidationException e) {
