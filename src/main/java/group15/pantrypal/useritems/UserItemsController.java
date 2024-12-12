@@ -76,6 +76,9 @@ public class UserItemsController {
                     if (userItemDetails.getUnit() != null) {
                         userItem.setUnit(userItemDetails.getUnit());
                     }
+                    if (userItemDetails.getQuantity() != userItem.getQuantity()) {
+                        userItem.setQuantity(userItemDetails.getQuantity());
+                    }
                     if (userItemDetails.getIsFavorite() != userItem.getIsFavorite()) {
                         userItem.setIsFavorite(userItemDetails.getIsFavorite());
                     }
