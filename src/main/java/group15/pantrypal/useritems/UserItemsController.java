@@ -52,6 +52,33 @@ public class UserItemsController {
                     userItem.setItemId(userItemDetails.getItemId());
                     userItem.setUserId(userItemDetails.getUserId());
                     userItem.setQuantity(userItemDetails.getQuantity());
+                    userItem.setIsFavorite(userItemDetails.getIsFavorite());
+                    UserItems updatedUserItem = userItemsRepository.save(userItem);
+                    return new ResponseEntity<>(updatedUserItem, HttpStatus.OK);
+                })
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Update a user item partially
+    @PatchMapping("/{id}")
+    public ResponseEntity<UserItems> updateUserItemPartial(@PathVariable Long id, @RequestBody UserItems userItemDetails) {
+        return userItemsRepository.findById(id)
+                .map(userItem -> {
+                    if (userItemDetails.getItemId() != null) {
+                        userItem.setItemId(userItemDetails.getItemId());
+                    }
+                    if (userItemDetails.getUserId() != null) {
+                        userItem.setUserId(userItemDetails.getUserId());
+                    }
+                    if (userItemDetails.getExpirationDate() != null) {
+                        userItem.setExpirationDate(userItemDetails.getExpirationDate());
+                    }
+                    if (userItemDetails.getUnit() != null) {
+                        userItem.setUnit(userItemDetails.getUnit());
+                    }
+                    if (userItemDetails.getIsFavorite() != userItem.getIsFavorite()) {
+                        userItem.setIsFavorite(userItemDetails.getIsFavorite());
+                    }
                     UserItems updatedUserItem = userItemsRepository.save(userItem);
                     return new ResponseEntity<>(updatedUserItem, HttpStatus.OK);
                 })
