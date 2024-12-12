@@ -1,5 +1,6 @@
 package group15.pantrypal.auth;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,6 +20,15 @@ public class UserAuthController {
 
     public UserAuthController(UserService userService) {
         this.userService = userService;
+    }
+    @GetMapping("/")
+    public void home(HttpServletResponse response) throws IOException {
+         response.sendRedirect("https://http://localhost:8081/");
+    };
+
+    @GetMapping("/register")
+    public void registerPageRedirect(HttpServletResponse response) throws IOException {
+        response.sendRedirect("http://localhost:8081/SignUp");
     }
 
     // Manual registration
@@ -39,11 +50,18 @@ public class UserAuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during registration.");
         }
     }
-
-
+    @GetMapping("/login")
+    public void loginPageRedirect(HttpServletResponse response) throws IOException {
+        response.sendRedirect("http://localhost:8081/logIn"); // Redirect to your React login page
+    }
     // Manual login
+    // Handle manual login
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password, HttpSession session) {
+    public ResponseEntity<String> login(
+            @RequestParam String username,
+            @RequestParam String password,
+            HttpSession session
+    ) {
         Optional<UserAuth> user = userService.findByUsername(username);
         if (user.isPresent() && userService.passwordMatch(password, user.get().getPassword())) {
             session.setAttribute("username", username);
