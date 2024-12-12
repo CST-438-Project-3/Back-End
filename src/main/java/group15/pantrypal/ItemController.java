@@ -44,6 +44,35 @@ public class ItemController {
                 .map(item -> {
                     item.setItemName(itemDetails.getItemName());
                     item.setItemCategory(itemDetails.getItemCategory());
+                    item.setItemQuantity(itemDetails.getItemQuantity());
+                    item.setItemUrl(itemDetails.getItemUrl());
+                    item.setIsFavorite(itemDetails.getIsFavorite());
+                    Item updatedItem = itemRepository.save(item);
+                    return new ResponseEntity<>(updatedItem, HttpStatus.OK);
+                })
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Update an item partially
+    @PatchMapping("/{id}")
+    public ResponseEntity<Item> updateItemPartial(@PathVariable Long id, @RequestBody Item itemDetails) {
+        return itemRepository.findById(id)
+                .map(item -> {
+                    if (itemDetails.getItemName() != null) {
+                        item.setItemName(itemDetails.getItemName());
+                    }
+                    if (itemDetails.getItemCategory() != null) {
+                        item.setItemCategory(itemDetails.getItemCategory());
+                    }
+                    if (itemDetails.getItemUrl() != null) {
+                        item.setItemUrl(itemDetails.getItemUrl());
+                    }
+                    if (itemDetails.getItemQuantity() != 0) {
+                        item.setItemQuantity(itemDetails.getItemQuantity());
+                    }
+                    if ( itemDetails.getIsFavorite() != (item.getIsFavorite()) ) {
+                        item.setIsFavorite(itemDetails.getIsFavorite());
+                    }
                     Item updatedItem = itemRepository.save(item);
                     return new ResponseEntity<>(updatedItem, HttpStatus.OK);
                 })
