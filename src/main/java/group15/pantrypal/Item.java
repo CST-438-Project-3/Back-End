@@ -6,7 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 
-
 @Entity
 public class Item {
     @Id
@@ -20,14 +19,16 @@ public class Item {
     @Column(name = "item_category")
     private String itemCategory;
 
+
+    @Column(name = "item_quantity")
+    private Integer itemQuantity;
+
     @Column(name = "item_url")
     private String itemUrl;
 
-    @Column(name = "item_quantity")
-    private int itemQuantity;
-
     @Column(name = "is_favorite")
-    private boolean isFavorite;
+    private Boolean isFavorite;
+
 
     // Getters and setters
     public Long getId() {
@@ -54,11 +55,8 @@ public class Item {
         this.itemCategory = itemCategory;
     }
 
-    public String getItemUrl() { return itemUrl; }
 
-    public void setItemUrl(String itemUrl) { this.itemUrl = itemUrl; }
-
-    public int getItemQuantity() {
+    public Integer getItemQuantity() {
         return itemQuantity;
     }
 
@@ -66,11 +64,19 @@ public class Item {
         this.itemQuantity = itemQuantity;
     }
 
-    public boolean getIsFavorite() {
+    public String getItemUrl() {
+        return itemUrl;
+    }
+
+    public void setItemUrl(String itemUrl) {
+        this.itemUrl = itemUrl;
+    }
+
+    public Boolean getIsFavorite() {
         return isFavorite;
     }
 
-    public void setIsFavorite(boolean isFavorite) {
+    public void setIsFavorite(Boolean isFavorite) {
         this.isFavorite = isFavorite;
     }
 
