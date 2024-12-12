@@ -82,40 +82,6 @@ public class ItemController {
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Update an Item with toggling
-    @PatchMapping("/{id}")
-    public ResponseEntity<Item> updateItemPartial(@PathVariable Long id, @RequestBody Item itemDetails) {
-        try {
-            // Log req to check if the data is correct
-            System.out.println("Received request to toggle favorite for item ID: " + id);
-
-            // Fetch item by ID
-            return itemRepository.findById(id)
-                    .map(item -> {
-                        // Log the current item data
-                        System.out.println("Current item before update: " + item);
-
-                        // Toggle favorite
-                        if (itemDetails.getIsFavorite() != null) {
-                            item.setIsFavorite(itemDetails.getIsFavorite());  // Set the value
-                        }
-
-                        // Save updates
-                        Item updatedItem = itemRepository.save(item);
-
-                        // Log updates
-                        System.out.println("Updated item: " + updatedItem);
-                        return new ResponseEntity<>(updatedItem, HttpStatus.OK);
-                    })
-                    .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-        } catch (Exception e) {
-            // Log the error
-            System.err.println("Error toggling favorite: " + e.getMessage());
-            e.printStackTrace();  // Print the full stack trace to the console
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500 error response
-        }
-    }
-
     // Delete an item
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteItem(@PathVariable Long id) {
