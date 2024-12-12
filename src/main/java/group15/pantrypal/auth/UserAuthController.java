@@ -1,6 +1,8 @@
 package group15.pantrypal.auth;
 
+
 import jakarta.servlet.http.HttpServletRequest;
+
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,15 @@ public class UserAuthController {
 
     public UserAuthController(UserService userService) {
         this.userService = userService;
+    }
+    @GetMapping("/")
+    public void home(HttpServletResponse response) throws IOException {
+         response.sendRedirect("https://http://localhost:8081/");
+    };
+
+    @GetMapping("/register")
+    public void registerPageRedirect(HttpServletResponse response) throws IOException {
+        response.sendRedirect("http://localhost:8081/SignUp");
     }
 
     // Manual registration
@@ -43,22 +54,25 @@ public class UserAuthController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred during registration.");
         }
     }
-
-
-    // Manual login
+    @GetMapping("/login")
+    public void loginPageRedirect(HttpServletResponse response) throws IOException {
+        response.sendRedirect("http://localhost:8081/logIn"); // Redirect to your React login page
+    }
+    
+    // Handle manual login
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody Map<String, String> user, HttpSession session) {
-        String username = user.get("username");
-        String password = user.get("password");
-        Optional<UserAuth> userAuth = userService.findByUsername(username);
-        if (userAuth.isPresent() && userService.passwordMatch(password, userAuth.get().getPassword())) {
-            session.setAttribute("userId", userAuth.get().getUserId());
-            session.setAttribute("username", username);
-            session.setAttribute("role", userAuth.get().getRole());
-            return ResponseEntity.ok(String.valueOf(userAuth.get().getUserId()));
-        }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials.");
+      String username = user.get("username");
+      String password = user.get("password");
+      Optional<UserAuth> userAuth = userService.findByUsername(username);
+       if (userAuth.isPresent() && userService.passwordMatch(password, userAuth.get().getPassword())) {
+        session.setAttribute("userId", userAuth.get().getUserId());
+        session.setAttribute("username", username);
+        session.setAttribute("role", userAuth.get().getRole());
+        return ResponseEntity.ok(String.valueOf(userAuth.get().getUserId()));
     }
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials.");
+}
 
     // Logout
     @PostMapping("/logout")

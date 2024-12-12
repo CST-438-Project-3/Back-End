@@ -12,10 +12,10 @@ public class TestController {
     }
 
 
-    @GetMapping("/")
-    public String home() {
-        return "Home";
-    }
+   // @GetMapping("/")
+    //public String home() {
+       // return "Home";
+    //}
 
 
 }
